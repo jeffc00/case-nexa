@@ -1,0 +1,481 @@
+,assessment,day,event,patient,time
+0,,16,arrived,1134,66
+1,,16,assessment initiated,1134,94
+2,,16,arrived,1135,95
+3,urgent|37.099999999999994|moderate pain,16,assessment concluded,1134,247
+4,,16,consultation_initiated,1134,280
+5,,16,assessment initiated,1135,291
+6,normal|36.9|no pain,16,assessment concluded,1135,473
+7,,16,consultation_initiated,1135,498
+8,,16,arrived,1136,669
+9,,16,assessment initiated,1136,688
+10,normal|36.599999999999994|no pain,16,assessment concluded,1136,801
+11,,16,consultation_initiated,1136,863
+12,,16,arrived,1137,870
+13,,16,arrived,1138,886
+14,,16,assessment initiated,1137,903
+15,normal|36.5|no pain,16,assessment concluded,1137,975
+16,,16,consultation_initiated,1137,994
+17,,16,assessment initiated,1138,1005
+18,,16,arrived,1139,1017
+19,,16,consultation_finished,1135,1063
+20,normal|37.0|no pain,16,assessment concluded,1138,1103
+21,,16,assessment initiated,1139,1139
+22,,16,consultation_initiated,1138,1139
+23,,16,consultation_finished,1136,1208
+24,normal|36.699999999999996|no pain,16,assessment concluded,1139,1272
+25,,16,consultation_initiated,1139,1295
+26,,16,arrived,1140,1358
+27,,16,assessment initiated,1140,1394
+28,,16,consultation_finished,1137,1436
+29,normal|37.0|no pain,16,assessment concluded,1140,1471
+30,,16,consultation_initiated,1140,1497
+31,,16,arrived,1141,1527
+32,,16,arrived,1142,1529
+33,,16,assessment initiated,1141,1546
+34,normal|36.8|no pain,16,assessment concluded,1141,1632
+35,,16,arrived,1143,1637
+36,,16,consultation_initiated,1141,1658
+37,,16,assessment initiated,1142,1672
+38,,16,consultation_finished,1139,1834
+39,,16,consultation_finished,1134,1891
+40,,16,consultation_finished,1138,1986
+41,,16,arrived,1144,1999
+42,,16,arrived,1145,2030
+43,urgent|36.9|no pain,16,assessment concluded,1142,2074
+44,,16,consultation_initiated,1142,2098
+45,,16,assessment initiated,1143,2102
+46,,16,consultation_finished,1141,2169
+47,normal|36.699999999999996|no pain,16,assessment concluded,1143,2182
+48,,16,assessment initiated,1144,2202
+49,,16,consultation_initiated,1143,2220
+50,normal|37.0|severe pain,16,assessment concluded,1144,2269
+51,,16,consultation_initiated,1144,2290
+52,,16,assessment initiated,1145,2292
+53,,16,arrived,1146,2325
+54,,16,arrived,1147,2363
+55,normal|36.699999999999996|no pain,16,assessment concluded,1145,2381
+56,,16,assessment initiated,1146,2403
+57,,16,consultation_initiated,1145,2415
+58,,16,arrived,1148,2502
+59,,16,consultation_finished,1143,2546
+60,,16,arrived,1149,2557
+61,normal|36.9|no pain,16,assessment concluded,1146,2573
+62,,16,consultation_initiated,1146,2590
+63,,16,assessment initiated,1147,2616
+64,,16,consultation_finished,1140,2636
+65,normal|36.699999999999996|no pain,16,assessment concluded,1147,2697
+66,,16,assessment initiated,1148,2713
+67,,16,consultation_initiated,1147,2723
+68,,16,consultation_finished,1145,2762
+69,,16,consultation_finished,1144,2768
+70,,16,arrived,1150,2800
+71,urgent|36.5|no pain,16,assessment concluded,1148,2811
+72,,16,consultation_finished,1142,2814
+73,,16,consultation_initiated,1148,2834
+74,,16,assessment initiated,1149,2851
+75,,16,arrived,1151,2882
+76,,16,arrived,1152,2909
+77,normal|36.8|no pain,16,assessment concluded,1149,2932
+78,,16,assessment initiated,1150,2960
+79,,16,consultation_initiated,1149,2965
+80,,16,consultation_finished,1147,2987
+81,urgent|37.5|moderate pain,16,assessment concluded,1150,3049
+82,,16,arrived,1153,3052
+83,,16,assessment initiated,1151,3064
+84,,16,consultation_initiated,1150,3101
+85,,16,arrived,1154,3110
+86,,16,arrived,1155,3117
+87,normal|36.699999999999996|no pain,16,assessment concluded,1151,3167
+88,,16,consultation_initiated,1151,3192
+89,,16,assessment initiated,1152,3202
+90,,16,arrived,1156,3213
+91,,16,consultation_finished,1146,3227
+92,normal|36.699999999999996|no pain,16,assessment concluded,1152,3310
+93,,16,arrived,1157,3336
+94,,16,consultation_initiated,1152,3337
+95,,16,arrived,1158,3351
+96,,16,assessment initiated,1153,3357
+97,,16,consultation_finished,1149,3431
+98,normal|36.8|no pain,16,assessment concluded,1153,3441
+99,,16,assessment initiated,1154,3481
+100,,16,consultation_initiated,1153,3483
+101,,16,consultation_finished,1151,3495
+102,normal|36.699999999999996|no pain,16,assessment concluded,1154,3545
+103,,16,consultation_finished,1148,3563
+104,,16,assessment initiated,1155,3583
+105,,16,consultation_initiated,1154,3588
+106,,16,arrived,1159,3600
+107,,16,arrived,1160,3632
+108,normal|36.9|no pain,16,assessment concluded,1155,3663
+109,,16,consultation_initiated,1155,3685
+110,,16,assessment initiated,1156,3710
+111,,16,consultation_finished,1152,3738
+112,normal|36.8|no pain,16,assessment concluded,1156,3783
+113,,16,consultation_initiated,1156,3799
+114,,16,assessment initiated,1157,3819
+115,,16,consultation_finished,1154,3855
+116,,16,consultation_finished,1153,3885
+117,normal|37.0|moderate pain,16,assessment concluded,1157,3886
+118,,16,consultation_finished,1155,3900
+119,,16,assessment initiated,1158,3903
+120,,16,consultation_initiated,1157,3909
+121,,16,arrived,1161,3919
+122,,16,arrived,1162,3947
+123,normal|37.0|moderate pain,16,assessment concluded,1158,3969
+124,,16,consultation_initiated,1158,4009
+125,,16,assessment initiated,1159,4012
+126,urgent|37.199999999999996|no pain,16,assessment concluded,1159,4077
+127,,16,consultation_initiated,1159,4111
+128,,16,assessment initiated,1160,4122
+129,,16,arrived,1163,4175
+130,,16,consultation_finished,1156,4177
+131,normal|36.599999999999994|moderate pain,16,assessment concluded,1160,4226
+132,,16,arrived,1164,4245
+133,,16,consultation_initiated,1160,4250
+134,,16,assessment initiated,1161,4258
+135,normal|36.8|no pain,16,assessment concluded,1161,4359
+136,,16,assessment initiated,1162,4375
+137,,16,consultation_initiated,1161,4389
+138,,16,consultation_finished,1150,4438
+139,normal|36.699999999999996|moderate pain,16,assessment concluded,1162,4457
+140,,16,consultation_initiated,1162,4490
+141,,16,assessment initiated,1163,4499
+142,,16,consultation_finished,1157,4548
+143,normal|36.9|severe pain,16,assessment concluded,1163,4605
+144,,16,consultation_initiated,1163,4631
+145,,16,assessment initiated,1164,4634
+146,,16,consultation_finished,1161,4738
+147,normal|36.9|no pain,16,assessment concluded,1164,4782
+148,,16,consultation_initiated,1164,4799
+149,,16,arrived,1165,4848
+150,,16,consultation_finished,1158,4858
+151,,16,assessment initiated,1165,4873
+152,,16,consultation_finished,1160,4892
+153,,16,consultation_finished,1162,4912
+154,,16,arrived,1166,4988
+155,normal|36.8|no pain,16,assessment concluded,1165,4997
+156,,16,consultation_finished,1163,5017
+157,,16,consultation_initiated,1165,5034
+158,,16,assessment initiated,1166,5043
+159,,16,consultation_finished,1159,5112
+160,,16,arrived,1167,5217
+161,,16,consultation_finished,1164,5266
+162,normal|36.699999999999996|no pain,16,assessment concluded,1166,5305
+163,,16,assessment initiated,1167,5327
+164,,16,consultation_initiated,1166,5335
+165,urgent|36.599999999999994|moderate pain,16,assessment concluded,1167,5401
+166,,16,consultation_initiated,1167,5419
+167,,16,arrived,1168,5420
+168,,16,arrived,1169,5421
+169,,16,assessment initiated,1168,5441
+170,,16,consultation_finished,1165,5520
+171,normal|37.199999999999996|no pain,16,assessment concluded,1168,5560
+172,,16,consultation_initiated,1168,5602
+173,,16,assessment initiated,1169,5614
+174,normal|36.8|no pain,16,assessment concluded,1169,5695
+175,,16,arrived,1170,5699
+176,,16,consultation_initiated,1169,5724
+177,,16,assessment initiated,1170,5741
+178,,16,arrived,1171,5744
+179,,16,arrived,1172,5761
+180,,16,arrived,1173,5823
+181,,16,arrived,1174,5826
+182,,16,arrived,1175,5846
+183,normal|36.699999999999996|no pain,16,assessment concluded,1170,5898
+184,,16,assessment initiated,1171,5917
+185,,16,consultation_initiated,1170,5948
+186,,16,consultation_finished,1166,6003
+187,normal|36.8|moderate pain,16,assessment concluded,1171,6004
+188,,16,consultation_initiated,1171,6032
+189,,16,assessment initiated,1172,6042
+190,urgent|36.4|severe pain,16,assessment concluded,1172,6128
+191,,16,consultation_initiated,1172,6154
+192,,16,assessment initiated,1173,6164
+193,,16,consultation_finished,1168,6243
+194,,16,consultation_finished,1170,6273
+195,,16,arrived,1176,6274
+196,,16,consultation_finished,1169,6312
+197,urgent|36.4|no pain,16,assessment concluded,1173,6342
+198,,16,assessment initiated,1174,6362
+199,,16,arrived,1177,6376
+200,,16,consultation_initiated,1173,6382
+201,normal|36.9|no pain,16,assessment concluded,1174,6426
+202,,16,consultation_finished,1171,6446
+203,,16,consultation_initiated,1174,6448
+204,,16,assessment initiated,1175,6471
+205,urgent|42.099999999999994|severe pain,16,assessment concluded,1175,6533
+206,,16,arrived,1178,6534
+207,,16,arrived,1179,6544
+208,,16,arrived,1180,6546
+209,,16,assessment initiated,1176,6552
+210,,16,consultation_initiated,1175,6561
+211,urgent|36.4|no pain,16,assessment concluded,1176,6622
+212,,16,assessment initiated,1177,6657
+213,,16,consultation_initiated,1176,6673
+214,,16,arrived,1181,6698
+215,,16,consultation_finished,1167,6700
+216,normal|36.599999999999994|no pain,16,assessment concluded,1177,6720
+217,,16,consultation_initiated,1177,6743
+218,,16,assessment initiated,1178,6753
+219,,16,arrived,1182,6792
+220,,16,arrived,1183,6814
+221,normal|36.8|moderate pain,16,assessment concluded,1178,6817
+222,,16,assessment initiated,1179,6837
+223,,16,arrived,1184,6885
+224,urgent|37.4|severe pain,16,assessment concluded,1179,6930
+225,,16,assessment initiated,1180,6948
+226,normal|36.8|moderate pain,16,assessment concluded,1180,7019
+227,,16,assessment initiated,1181,7041
+228,,16,consultation_finished,1174,7090
+229,,16,consultation_initiated,1179,7142
+230,normal|36.699999999999996|no pain,16,assessment concluded,1181,7146
+231,,16,assessment initiated,1182,7177
+232,,16,arrived,1185,7290
+233,normal|36.8|no pain,16,assessment concluded,1182,7301
+234,,16,assessment initiated,1183,7332
+235,,16,arrived,1186,7402
+236,urgent|36.8|no pain,16,assessment concluded,1183,7412
+237,,16,consultation_finished,1176,7416
+238,,16,arrived,1187,7430
+239,,16,assessment initiated,1184,7435
+240,,16,consultation_initiated,1183,7440
+241,normal|36.8|no pain,16,assessment concluded,1184,7646
+242,,16,consultation_finished,1173,7651
+243,,16,assessment initiated,1185,7673
+244,,16,consultation_initiated,1178,7697
+245,,16,consultation_finished,1177,7733
+246,normal|36.9|no pain,16,assessment concluded,1185,7763
+247,,16,consultation_initiated,1180,7768
+248,,16,assessment initiated,1186,7791
+249,,16,consultation_finished,1183,7815
+250,,16,consultation_initiated,1181,7835
+251,,16,arrived,1188,7837
+252,normal|37.099999999999994|moderate pain,16,assessment concluded,1186,7854
+253,,16,assessment initiated,1187,7877
+254,,16,arrived,1189,7932
+255,normal|36.9|no pain,16,assessment concluded,1187,7971
+256,,16,consultation_finished,1172,7976
+257,,16,assessment initiated,1188,7996
+258,,16,consultation_initiated,1182,8008
+259,,16,consultation_finished,1180,8034
+260,,16,consultation_finished,1179,8046
+261,,16,consultation_initiated,1184,8076
+262,,16,consultation_initiated,1185,8121
+263,,16,arrived,1190,8183
+264,,16,consultation_finished,1181,8227
+265,urgent|37.199999999999996|moderate pain,16,assessment concluded,1188,8233
+266,,16,consultation_initiated,1186,8263
+267,,16,assessment initiated,1189,8272
+268,,16,arrived,1191,8284
+269,normal|36.8|moderate pain,16,assessment concluded,1189,8332
+270,,16,assessment initiated,1190,8355
+271,,16,consultation_finished,1184,8436
+272,,16,consultation_finished,1178,8441
+273,,16,consultation_finished,1182,8472
+274,,16,consultation_initiated,1187,8478
+275,,16,consultation_initiated,1188,8479
+276,,16,consultation_initiated,1189,8510
+277,,16,consultation_finished,1185,8537
+278,normal|36.9|no pain,16,assessment concluded,1190,8622
+279,,16,consultation_initiated,1190,8645
+280,,16,assessment initiated,1191,8648
+281,,16,arrived,1192,8651
+282,normal|36.699999999999996|no pain,16,assessment concluded,1191,8741
+283,,16,assessment initiated,1192,8788
+284,,16,consultation_finished,1187,8830
+285,,16,consultation_initiated,1191,8849
+286,normal|36.8|no pain,16,assessment concluded,1192,8850
+287,,16,arrived,1193,9012
+288,,16,assessment initiated,1193,9035
+289,,16,consultation_finished,1190,9039
+290,,16,consultation_finished,1175,9067
+291,,16,consultation_initiated,1192,9097
+292,,16,consultation_finished,1186,9127
+293,,16,arrived,1194,9157
+294,urgent|37.199999999999996|moderate pain,16,assessment concluded,1193,9159
+295,,16,consultation_initiated,1193,9177
+296,,16,assessment initiated,1194,9208
+297,,16,consultation_finished,1191,9213
+298,,16,consultation_finished,1189,9221
+299,,16,arrived,1195,9315
+300,,16,arrived,1196,9640
+301,normal|36.9|no pain,16,assessment concluded,1194,9657
+302,,16,assessment initiated,1195,9685
+303,,16,consultation_initiated,1194,9696
+304,,16,arrived,1197,9726
+305,urgent|36.5|moderate pain,16,assessment concluded,1195,9772
+306,,16,consultation_initiated,1195,9805
+307,,16,assessment initiated,1196,9807
+308,,16,consultation_finished,1192,9869
+309,normal|36.9|no pain,16,assessment concluded,1196,9895
+310,,16,consultation_finished,1193,9913
+311,,16,consultation_initiated,1196,9918
+312,,16,assessment initiated,1197,9933
+313,,16,consultation_finished,1194,10008
+314,,16,consultation_finished,1188,10014
+315,,16,arrived,1198,10045
+316,normal|36.8|moderate pain,16,assessment concluded,1197,10051
+317,,16,consultation_initiated,1197,10072
+318,,16,assessment initiated,1198,10075
+319,,16,arrived,1199,10095
+320,normal|37.0|no pain,16,assessment concluded,1198,10145
+321,,16,arrived,1200,10154
+322,,16,arrived,1201,10172
+323,,16,assessment initiated,1199,10180
+324,,16,consultation_initiated,1198,10196
+325,,16,arrived,1202,10293
+326,,16,arrived,1203,10339
+327,,16,arrived,1204,10352
+328,normal|37.199999999999996|no pain,16,assessment concluded,1199,10362
+329,,16,consultation_initiated,1199,10387
+330,,16,assessment initiated,1200,10402
+331,normal|37.0|no pain,16,assessment concluded,1200,10484
+332,,16,arrived,1205,10497
+333,,16,assessment initiated,1201,10519
+334,,16,consultation_initiated,1200,10524
+335,,16,arrived,1206,10583
+336,normal|36.9|no pain,16,assessment concluded,1201,10591
+337,,16,consultation_finished,1196,10597
+338,,16,consultation_initiated,1201,10614
+339,,16,assessment initiated,1202,10637
+340,,16,consultation_finished,1199,10708
+341,normal|37.0|no pain,16,assessment concluded,1202,10750
+342,,16,assessment initiated,1203,10778
+343,,16,consultation_initiated,1202,10802
+344,,16,consultation_finished,1201,10823
+345,urgent|36.8|no pain,16,assessment concluded,1203,10842
+346,,16,consultation_initiated,1203,10861
+347,,16,assessment initiated,1204,10863
+348,,16,consultation_finished,1195,10928
+349,normal|37.0|no pain,16,assessment concluded,1204,10955
+350,,16,arrived,1207,10971
+351,,16,assessment initiated,1205,10975
+352,,16,consultation_initiated,1204,10987
+353,,16,arrived,1208,11054
+354,normal|36.9|no pain,16,assessment concluded,1205,11085
+355,,16,consultation_finished,1197,11101
+356,,16,assessment initiated,1206,11116
+357,,16,consultation_initiated,1205,11131
+358,,16,consultation_finished,1198,11136
+359,,16,consultation_finished,1202,11161
+360,normal|37.599999999999994|severe pain,16,assessment concluded,1206,11223
+361,,16,assessment initiated,1207,11253
+362,,16,consultation_initiated,1206,11261
+363,,16,consultation_finished,1203,11299
+364,normal|36.4|moderate pain,16,assessment concluded,1207,11324
+365,,16,consultation_finished,1200,11353
+366,,16,consultation_initiated,1207,11357
+367,,16,consultation_finished,1204,11362
+368,,16,assessment initiated,1208,11380
+369,urgent|37.0|moderate pain,16,assessment concluded,1208,11458
+370,,16,consultation_initiated,1208,11478
+371,,16,consultation_finished,1205,11488
+372,,16,arrived,1209,11512
+373,,16,assessment initiated,1209,11551
+374,normal|36.9|no pain,16,assessment concluded,1209,11631
+375,,16,arrived,1210,11635
+376,,16,assessment initiated,1210,11662
+377,,16,consultation_initiated,1209,11663
+378,normal|36.599999999999994|moderate pain,16,assessment concluded,1210,11724
+379,,16,consultation_initiated,1210,11749
+380,,16,arrived,1211,11769
+381,,16,assessment initiated,1211,11795
+382,urgent|36.699999999999996|no pain,16,assessment concluded,1211,11872
+383,,16,consultation_initiated,1211,11903
+384,,16,arrived,1212,12013
+385,,16,arrived,1213,12028
+386,,16,assessment initiated,1212,12040
+387,urgent|37.0|no pain,16,assessment concluded,1212,12139
+388,,16,consultation_finished,1208,12149
+389,,16,assessment initiated,1213,12158
+390,,16,consultation_finished,1209,12166
+391,,16,consultation_initiated,1212,12175
+392,urgent|36.3|no pain,16,assessment concluded,1213,12330
+393,,16,consultation_initiated,1213,12367
+394,,16,arrived,1214,12409
+395,,16,assessment initiated,1214,12431
+396,,16,consultation_finished,1207,12461
+397,,16,arrived,1215,12519
+398,,16,consultation_finished,1210,12533
+399,,16,consultation_finished,1206,12594
+400,urgent|37.099999999999994|no pain,16,assessment concluded,1214,12604
+401,,16,arrived,1216,12618
+402,,16,consultation_initiated,1214,12634
+403,,16,assessment initiated,1215,12635
+404,,16,arrived,1217,12655
+405,normal|37.099999999999994|no pain,16,assessment concluded,1215,12700
+406,,16,assessment initiated,1216,12722
+407,,16,consultation_initiated,1215,12756
+408,,16,arrived,1218,12789
+409,,16,arrived,1219,12799
+410,urgent|36.699999999999996|severe pain,16,assessment concluded,1216,12808
+411,,16,arrived,1220,12814
+412,,16,assessment initiated,1217,12838
+413,,16,arrived,1221,12845
+414,,16,consultation_initiated,1216,12849
+415,,16,consultation_finished,1211,12925
+416,,16,arrived,1222,12932
+417,normal|36.699999999999996|no pain,16,assessment concluded,1217,12933
+418,,16,assessment initiated,1218,12954
+419,,16,consultation_initiated,1217,12956
+420,,16,arrived,1223,12980
+421,,16,arrived,1224,13003
+422,,16,consultation_finished,1212,13016
+423,,16,consultation_finished,1215,13052
+424,normal|36.8|no pain,16,assessment concluded,1218,13057
+425,,16,consultation_initiated,1218,13085
+426,,16,assessment initiated,1219,13099
+427,normal|36.599999999999994|moderate pain,16,assessment concluded,1219,13218
+428,,16,consultation_initiated,1219,13241
+429,,16,assessment initiated,1220,13245
+430,,16,consultation_finished,1216,13267
+431,,16,consultation_finished,1214,13365
+432,normal|37.0|no pain,16,assessment concluded,1220,13400
+433,,16,assessment initiated,1221,13421
+434,,16,consultation_initiated,1220,13428
+435,normal|36.599999999999994|no pain,16,assessment concluded,1221,13490
+436,,16,assessment initiated,1222,13516
+437,,16,consultation_initiated,1221,13537
+438,,16,arrived,1225,13546
+439,normal|36.599999999999994|no pain,16,assessment concluded,1222,13596
+440,,16,assessment initiated,1223,13666
+441,,16,arrived,1226,13687
+442,,16,consultation_finished,1218,13700
+443,,16,consultation_finished,1220,13706
+444,,16,consultation_initiated,1222,13732
+445,urgent|36.699999999999996|no pain,16,assessment concluded,1223,13817
+446,,16,consultation_finished,1213,13817
+447,,16,consultation_finished,1217,13832
+448,,16,consultation_initiated,1223,13840
+449,,16,arrived,1227,13840
+450,,16,assessment initiated,1224,13843
+451,,16,arrived,1228,13987
+452,normal|36.599999999999994|no pain,16,assessment concluded,1224,14038
+453,,16,consultation_initiated,1224,14059
+454,,16,assessment initiated,1225,14061
+455,,16,arrived,1229,14116
+456,normal|36.9|no pain,16,assessment concluded,1225,14123
+457,,16,assessment initiated,1226,14143
+458,,16,consultation_initiated,1225,14150
+459,,16,consultation_finished,1219,14154
+460,,16,consultation_finished,1222,14156
+461,normal|36.8|severe pain,16,assessment concluded,1226,14204
+462,,16,consultation_initiated,1226,14217
+463,,16,assessment initiated,1227,14224
+464,urgent|37.199999999999996|severe pain,16,assessment concluded,1227,14287
+465,,16,consultation_initiated,1227,14321
+466,,16,assessment initiated,1228,14332
+467,urgent|36.699999999999996|moderate pain,16,assessment concluded,1228,14410
+468,,16,assessment initiated,1229,14427
+469,urgent|36.8|no pain,16,assessment concluded,1229,14495
+470,,16,consultation_finished,1225,14522
+471,,16,consultation_initiated,1228,14556
+472,,16,consultation_finished,1221,14574
+473,,16,consultation_initiated,1229,14616
+474,,16,consultation_finished,1224,14817
+475,,16,consultation_finished,1223,14848
+476,,16,consultation_finished,1226,15054
+477,,16,consultation_finished,1228,15208
+478,,16,consultation_finished,1229,15310
+479,,16,consultation_finished,1227,16174
