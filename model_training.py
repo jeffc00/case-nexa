@@ -5,153 +5,93 @@ import pandas as pd
 import seaborn as sns
 import scipy.stats as ss
 from sklearn.linear_model import Ridge
-from sklearn.metrics import mean_squared_error
-from sklearn.model_selection import train_test_split, TimeSeriesSplit, RandomizedSearchCV
+from sklearn.metrics import make_scorer, mean_squared_log_error
+from sklearn.model_selection import TimeSeriesSplit, train_test_split, RandomizedSearchCV
 from sklearn.preprocessing import StandardScaler
 from tqdm import tqdm
 
-summary = pd.read_csv('data/summary.csv')
 
-summary_df = summary.sort_values(['day', 'assessment_end_time']).reset_index(drop=True)
+def main():
+    file_path = 'data/summary.csv'
+    summary_df = load_data(file_path)
+    summary_df = preprocess_data(summary_df)
 
-summary_df['temp_cat'] = pd.cut(summary_df['temperature'],
-                                bins=[float('-inf'), 36.5, 37.5, float('inf')],
-                                labels=['hypothermia', 'normal', 'fever'])
+    df_train = summary_df[summary_df['day'] <= 45]
+    df_test = summary_df[summary_df['day'] > 45]
 
-priority_map = {'normal': 1, 'urgent': 2}
-summary_df['priority_enc'] = summary_df['priority'].map(priority_map)
+    results_train_df = get_best_params_and_error(df_train)
+    train_error, val_error = get_avg_train_val_errors(results_train_df, df_train)
+    meta, features = train_model(summary_df, df_train, df_test, results_train_df)
 
-pain_map = {'no pain': 1, 'moderate pain': 2, 'severe pain': 3}
-summary_df['pain_enc'] = summary_df['pain'].map(pain_map)
+    train_error, test_error = get_model_results(meta, df_train, df_test)
 
-temp_map = {'hypothermia': 2, 'normal': 1, 'fever': 2}
-summary_df['temp_cat_enc'] = summary_df['temp_cat'].map(temp_map)
+    overall_error = get_overall_error(meta, summary_df, results_train_df)
 
-summary_df = pd.get_dummies(summary_df, columns=['pain', 'temp_cat'])
+    save_trained_model_coefs(meta)
 
-summary_df['pain_severe pain:temp_cat_hypothermia'] = \
-summary_df['pain_severe pain'] * summary_df['temp_cat_hypothermia']
-summary_df['pain_moderate pain:temp_cat_normal'] = \
-summary_df['pain_moderate pain'] * summary_df['temp_cat_normal']
-summary_df['pain_severe pain:temp_cat_fever'] = \
-summary_df['pain_severe pain'] * summary_df['temp_cat_fever']
+    save_trained_model_features(features)
 
-
-# def create_new_features(df):
-#     '''
-#     Given a dataframe, returns dataframe with new added features:
-#         free_doctors: number of doctors available after patient has passed triage
-#         queue_size: queue size after patient has passed triage
-#         urgents_on_queue: number of urgent priority patients on queue after patient has passed triage
-#     '''
     
-#     free_docs = [6]
-#     q_urg = [list()]
-#     q_norm = [list()]
-#     q_real = [list()]
-#     urgs_on_q = [0]
-#     q_size = 0
-#     nonbusy_docs = 0
-#     consult_endtime_ls = [df.loc[0, 'consultation_end_time']]
-    
-#     for i in range(1, len(df)):
-#         nonbusy_docs = (df.loc[i, 'assessment_end_time'] >= consult_endtime_ls).sum()
-#         consult_endtime_ls = consult_endtime_ls[nonbusy_docs:]
-
-#         if free_docs[i - 1] > 1:
-#             free_docs.append(free_docs[i - 1] - 1 + nonbusy_docs)
-#             consult_endtime_ls.append(df.loc[i, 'consultation_end_time'])
-#             consult_endtime_ls = sorted(consult_endtime_ls)
-#             q_urg.append(q_urg[i - 1])
-#             q_norm.append(q_norm[i - 1])
-#             q_real.append(q_urg[i] + q_norm[i])
-#             urgs_on_q.append(urgs_on_q[i - 1])
-#         elif nonbusy_docs == 0:
-#             free_docs.append(0)
-#             if df.loc[i, 'priority'] == 'urgent':
-#                 urgs_on_q.append(urgs_on_q[i - 1] + 1)
-#                 q_urg.append(q_urg[i - 1] + [i])
-#                 q_norm.append(q_norm[i - 1])
-#             else:
-#                 urgs_on_q.append(urgs_on_q[i - 1])
-#                 q_urg.append(q_urg[i - 1])
-#                 q_norm.append(q_norm[i - 1] + [i])
-#             q_real.append(q_urg[i] + q_norm[i])
-#             q_size = len(q_real[i])
-#         elif q_size == 0:
-#             free_docs.append(free_docs[i - 1] - 1 + nonbusy_docs)
-#             q_urg.append(q_urg[i - 1])
-#             q_norm.append(q_norm[i - 1])
-#             q_real.append(q_urg[i] + q_norm[i])
-#             urgs_on_q.append(urgs_on_q[i - 1])
-#             consult_endtime_ls.append(df.loc[i, 'consultation_end_time'])
-#             consult_endtime_ls = sorted(consult_endtime_ls)
-#         else:
-#             free_docs.append(np.max([free_docs[i - 1] + nonbusy_docs - q_size, 0]))
-#             if df.loc[i, 'priority'] == 'urgent':
-#                 urgs_on_q.append(urgs_on_q[i - 1] + 1)
-#                 q_urg.append(q_urg[i - 1] + [i])
-#                 q_norm.append(q_norm[i - 1])
-#             else:
-#                 urgs_on_q.append(urgs_on_q[i - 1])
-#                 q_urg.append(q_urg[i - 1])
-#                 q_norm.append(q_norm[i - 1] + [i])
-#             q_real.append(q_urg[i] + q_norm[i])
-#             q_size = len(q_real[i])
-#             while q_size > 0 and nonbusy_docs > 0:
-#                 patient = q_real[i].pop(0)
-#                 if df.loc[patient, 'priority'] == 'urgent':
-#                     urgs_on_q[i] -= 1
-#                     q_urg[i].pop(0)
-#                 else:
-#                     q_norm[i].pop(0)
-#                 consult_endtime_ls.append(df.loc[patient, 'consultation_end_time'])
-#                 consult_endtime_ls = sorted(consult_endtime_ls)
-#                 q_size -= 1
-#                 nonbusy_docs -= 1
-                
-# #     new_features = pd.DataFrame([free_docs, pd.Series(q_real).apply(lambda x: len(x)), urgs_on_q],
-# #                                 index=['free_doctors', 'queue_size', 'urgents_on_queue']).T
-    
-#     new_features = pd.DataFrame([pd.Series(q_real).apply(lambda x: len(x))],
-#                             index=['queue_size']).T
-    
-#     return pd.concat([df, new_features], axis=1)
-
-
-# summary_mod = pd.DataFrame(columns=summary_df.columns)
-# for i in summary_df['day'].unique():
-#     df = create_new_features(summary_df[summary_df['day'] == i].reset_index(drop=True))
-#     summary_mod = pd.concat([summary_mod, df], axis=0)
-
-# uncomment the line below if you uncomment the code block above
-# summary_df = summary_mod
-
-cols_to_drop = ['Unnamed: 0', 'arrival_time', 'assessment_start_time', 'patient',
-                'priority','duration', 'temperature', 'consultation_start_time',
-                'pain_no pain', 'pain_moderate pain', 'pain_severe pain',
-                'temp_cat_hypothermia', 'temp_cat_normal', 'temp_cat_fever']
-
-summary_df.drop(cols_to_drop, axis=1, inplace=True)
-
-df_train = summary_df[summary_df['day'] <= 45]
-df_test = summary_df[summary_df['day'] > 45]
-
-
-best_params_ls = []
-train_rmse_ls = []
-val_rmse_ls = []
-def get_best_params_and_rmse(df):
+def load_data(file_path):
     '''
-    Given df, returns:
-        - a list of the parameters of the best model for each day
-        - a list of the cv train rmse of the best model for each day
-        - a list of the cv validation rmse of the best model for each day
+    Load and sort training data.
     '''
+    summary = pd.read_csv(file_path)
+    summary_df = summary.sort_values(['day', 'assessment_end_time']).reset_index(drop=True)
+
+    return summary_df
+
+
+def preprocess_data(summary_df):
+    '''
+    Encode categorical features and return a new dataframe with unnecessary columns removed.
+    '''
+    summary_df['temp_cat'] = pd.cut(summary_df['temperature'],
+                                    bins=[float('-inf'), 36.5, 37.5, float('inf')],
+                                    labels=['hypothermia', 'normal', 'fever'])
+
+    priority_map = {'normal': 1, 'urgent': 2}
+    summary_df['priority_enc'] = summary_df['priority'].map(priority_map)
+
+    pain_map = {'no pain': 1, 'moderate pain': 2, 'severe pain': 3}
+    summary_df['pain_enc'] = summary_df['pain'].map(pain_map)
+
+    temp_map = {'hypothermia': 2, 'normal': 1, 'fever': 2}
+    summary_df['temp_cat_enc'] = summary_df['temp_cat'].map(temp_map)
+
+    summary_df = pd.get_dummies(summary_df, columns=['pain', 'temp_cat'])
+
+    summary_df['pain_severe pain:temp_cat_hypothermia'] = \
+    summary_df['pain_severe pain'] * summary_df['temp_cat_hypothermia']
+    summary_df['pain_moderate pain:temp_cat_normal'] = \
+    summary_df['pain_moderate pain'] * summary_df['temp_cat_normal']
+    summary_df['pain_severe pain:temp_cat_fever'] = \
+    summary_df['pain_severe pain'] * summary_df['temp_cat_fever']
+
+    cols_to_drop = ['Unnamed: 0', 'arrival_time', 'assessment_start_time', 'patient',
+                    'priority', 'temperature', 'consultation_start_time',
+                    'pain_no pain', 'pain_moderate pain', 'pain_severe pain',
+                    'temp_cat_hypothermia', 'temp_cat_normal', 'temp_cat_fever']
+
+    summary_df.drop(cols_to_drop, axis=1, inplace=True)
+
+    return summary_df
+
+
+def get_best_params_and_error(df):
+    '''
+    Given df, returns a dataframe containing:
+        - the parameters of the best model for each day
+        - the cv train MSLE of the best model for each day
+        - the cv validation MSLE of the best model for each day
+    '''
+    best_params_ls = []
+    train_error_ls = []
+    val_error_ls = []
     
     for i in tqdm(df['day'].unique()):
-        X_train = df[df['day'] == i].drop(['day', 'consultation_end_time'], axis=1)
-        y_train = df.loc[df['day'] == i, 'consultation_end_time']
+        X_train = df[df['day'] == i].drop(['day', 'duration'], axis=1)
+        y_train = df.loc[df['day'] == i, 'duration']
 
         tscv = TimeSeriesSplit(n_splits=5)
 
@@ -160,7 +100,7 @@ def get_best_params_and_rmse(df):
 
         rscv = RandomizedSearchCV(ridge,
                                 ridge_params,
-                                scoring='neg_root_mean_squared_error',
+                                scoring=make_scorer(mean_squared_log_error, greater_is_better=False),
                                 n_iter=100,
                                 n_jobs=-1,
                                 cv=tscv,
@@ -173,15 +113,29 @@ def get_best_params_and_rmse(df):
         best_params_ls.append(rscv.best_params_)
 
         cv_results = pd.DataFrame(rscv.cv_results_)
-        train_rmse_ls.append(-cv_results.loc[rscv.best_index_, 'mean_train_score'])
-        val_rmse_ls.append(-cv_results.loc[rscv.best_index_, 'mean_test_score'])
+        train_error_ls.append(-cv_results.loc[rscv.best_index_, 'mean_train_score'])
+        val_error_ls.append(-cv_results.loc[rscv.best_index_, 'mean_test_score'])
+
+        results_train_df = pd.DataFrame([best_params_ls, train_error_ls, val_error_ls],
+                                        index=['best_params', 'train_msle', 'val_msle']).T
         
-    return best_params_ls, train_rmse_ls, val_rmse_ls
+    return results_train_df
 
-best_params_ls, train_rmse_ls, val_rmse_ls = get_best_params_and_rmse(df_train)
 
-results_train_df = pd.DataFrame([best_params_ls, train_rmse_ls, val_rmse_ls],
-                                index=['best_params', 'train_rmse', 'val_rmse']).T
+def get_avg_train_val_errors(results_train_df, df_train):
+    '''
+    Returns train and validation errors during training.
+    '''
+    n_obs_per_day = df_train['day'].value_counts().sort_index().values
+    n_obs_total = n_obs_per_day.sum()
+
+    train_error = np.sqrt((results_train_df['train_msle']*n_obs_per_day).sum() / n_obs_total)
+    val_error = np.sqrt((results_train_df['val_msle']*n_obs_per_day).sum() / n_obs_total)
+
+    print(f'train RMSLE: {train_error}')
+    print(f'val RMSLE: {val_error}')
+
+    return train_error, val_error
 
 
 class MetaEstimator():
@@ -224,22 +178,89 @@ class MetaEstimator():
         return preds
 
 
-scaler = StandardScaler()
+def train_model(summary_df, df_train, df_test, results_train_df):
+    '''
+    Train a Ridge Regression model for predicting patient's consultation end time after triage assessment,
+    and return:
+        - trained model
+        - train model's features
+        - Root Mean Squared Log Error (RMSLE) for training, validation and testing
+    '''
 
-df_train_new = df_train.drop(['day', 'consultation_end_time'], axis=1)
-df_test_new = df_test.drop(['day', 'consultation_end_time'], axis=1)
+    scaler = StandardScaler()
 
-X_train_scaled = \
-pd.concat([pd.DataFrame(scaler.fit_transform(df_train_new), columns=df_train_new.columns),
+    df_train_new = df_train.drop(['day', 'consultation_end_time', 'duration'], axis=1)
+    df_test_new = df_test.drop(['day', 'consultation_end_time', 'duration'], axis=1)
+
+    X_train_scaled = \
+    pd.concat([pd.DataFrame(scaler.fit_transform(df_train_new), columns=df_train_new.columns),
             df_train['day']], axis=1)
-X_test_scaled = \
-pd.concat([pd.DataFrame(scaler.transform(df_test_new), columns=df_test_new.columns, index=df_test_new.index),
+    X_test_scaled = \
+    pd.concat([pd.DataFrame(scaler.transform(df_test_new), columns=df_test_new.columns, index=df_test_new.index),
             df_test['day']], axis=1)
 
-y_train = df_train[['day', 'consultation_end_time']]
-y_test = df_test[['day', 'consultation_end_time']]
+    y_train = df_train[['day', 'consultation_end_time']]
+    y_test = df_test[['day', 'consultation_end_time']]
 
-meta = MetaEstimator(results_train_df['best_params'])
-meta.fit(X_train_scaled, y_train)
+    meta = MetaEstimator(results_train_df['best_params'])
+    meta.fit(X_train_scaled, y_train)
 
-joblib.dump(meta, 'consultation_end_time_estimator.pkl')
+    features = df_train_new.columns
+
+    return meta, features
+
+
+def get_model_results(meta, df_train, df_test):
+    '''
+    Returns train and test errors after training is concluded.
+    '''
+    X_train = df_train.drop(['consultation_end_time', 'duration'], axis=1)
+    y_train_true = df_train['consultation_end_time'] - df_train['assessment_end_time']
+    y_train_pred = meta.predict(X_train) - df_train['assessment_end_time']
+
+    X_test = df_test.drop(['consultation_end_time', 'duration'], axis=1)
+    y_test_true = df_test['consultation_end_time'] - df_test['assessment_end_time']
+    y_test_pred = meta.predict(X_test) - df_test['assessment_end_time']
+
+    train_error = np.sqrt(mean_squared_log_error(y_train_true, y_train_pred))
+    test_error = np.sqrt(mean_squared_log_error(y_test_true, y_test_pred))
+
+    print(f'train RMSLE: {train_error}')
+    print(f'test RMSLE: {test_error}')
+
+    return train_error, test_error
+
+
+def get_overall_error(meta, summary_df, results_train_df):
+    '''
+    Returns the overall error over the entire dataset after training is concluded.
+    '''
+    scaler = StandardScaler()
+
+    df = summary_df.drop(['day', 'consultation_end_time', 'duration'], axis=1)
+    X = pd.concat([pd.DataFrame(scaler.fit_transform(df), columns=df.columns), summary_df['day']], axis=1)
+    y = summary_df[['day', 'consultation_end_time']]
+
+    meta = MetaEstimator(results_train_df['best_params'])
+    meta.fit(X, y)
+
+    X = summary_df.drop(['consultation_end_time', 'duration'], axis=1)
+    y_true = summary_df['consultation_end_time'] - summary_df['assessment_end_time']
+    y_pred = meta.predict(X) - summary_df['assessment_end_time']
+
+    overall_error = np.sqrt(mean_squared_log_error(y_true, y_pred))
+    print(f'overall root mean squared log error: {overall_error}')
+
+    return overall_error
+
+
+def save_trained_model_coefs(meta):
+    joblib.dump(meta.coefs, 'trained_model_coefs.pkl')
+
+
+def save_trained_model_features(features):
+    joblib.dump(features, 'trained_model_features.pkl')
+
+
+if __name__ == '__main__':
+    main()

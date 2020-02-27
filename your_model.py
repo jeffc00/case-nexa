@@ -3,8 +3,7 @@
 
 
 def get_model():
-    import joblib
-    model = joblib.load('consultation_end_time_estimator.pkl')
+    import current_ridge_model as model
     return model
 
 
@@ -13,15 +12,19 @@ def get_state_machine():
 
 
 def get_features(state_machine, patient_id):
-    return state_machine['time'][patient_id]
+    return state_machine[patient_id]
 
 
 def get_estimate(model, features):
     import pandas as pd
 
     priority = features['priority']
-    temperature = features['temperature']
+    temperature = float(features['temperature'])
     pain = features['pain']
+
+    features['pain_severe pain:temp_cat_fever'] = 0
+    features['pain_severe pain:temp_cat_hypothermia'] = 0
+    features['pain_moderate pain:temp_cat_normal'] = 0
 
     if priority == 'normal':
         features['priority_enc'] = 1
@@ -42,7 +45,7 @@ def get_estimate(model, features):
             features['pain_moderate pain:temp_cat_normal'] = 0
     else:
         features['temp_cat_enc'] = 2
-        if pain == 'severe':
+        if pain == 'severe pain':
             features['pain_severe pain:temp_cat_fever'] = 1
         else:
             features['pain_severe pain:temp_cat_fever'] = 0
@@ -54,11 +57,11 @@ def get_estimate(model, features):
     else:
         features['pain_enc'] = 3
 
-    cols = ['assessment_end_time', 'consultation_end_time', 'day', 'priority_enc',
-            'pain_enc', 'temp_cat_enc', 'pain_severe pain:temp_cat_hypothermia',
+    cols = ['assessment_end_time', 'priority_enc', 'pain_enc',
+            'temp_cat_enc', 'pain_severe pain:temp_cat_hypothermia',
             'pain_moderate pain:temp_cat_normal', 'pain_severe pain:temp_cat_fever']
 
-    patient_features = pd.Series(features).drop(['day', 'priority', 'temperature', 'pain']).reindex(cols)
+    patient_features = pd.Series(features).drop(['priority', 'temperature', 'pain']).reindex(cols)
 
     return model.predict(patient_features)
 
@@ -68,6 +71,5 @@ def update_state(state_machine, event):
     state_machine[event.patient] = {}
     if event.event == 'assessment concluded':
         state_machine[event.patient]['assessment_end_time'] = event.time
-        state_machine[event.patient]['day'] = event.day
-        assessment = dict(zip(['priority', 'temperature', 'pain'], '|'.split(event.assessment)))
+        assessment = dict(zip(['priority', 'temperature', 'pain'], event.assessment.split('|')))
         state_machine[event.patient].update(assessment)
