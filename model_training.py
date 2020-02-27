@@ -21,9 +21,8 @@ def main():
 
     results_train_df = get_best_params_and_error(df_train)
     train_error, val_error = get_avg_train_val_errors(results_train_df, df_train)
-    meta, features = train_model(summary_df, df_train, df_test, results_train_df)
 
-    train_error, test_error = get_model_results(meta, df_train, df_test)
+    meta, features, train_error, test_error = final_model(summary_df, df_train, df_test, results_train_df)
 
     overall_error = get_overall_error(meta, summary_df, results_train_df)
 
@@ -116,15 +115,15 @@ def get_best_params_and_error(df):
         train_error_ls.append(-cv_results.loc[rscv.best_index_, 'mean_train_score'])
         val_error_ls.append(-cv_results.loc[rscv.best_index_, 'mean_test_score'])
 
-        results_train_df = pd.DataFrame([best_params_ls, train_error_ls, val_error_ls],
-                                        index=['best_params', 'train_msle', 'val_msle']).T
+        results = pd.DataFrame([best_params_ls, train_error_ls, val_error_ls],
+                                index=['best_params', 'train_msle', 'val_msle']).T
         
-    return results_train_df
+    return results
 
 
 def get_avg_train_val_errors(results_train_df, df_train):
     '''
-    Returns train and validation errors during training.
+    Returns train and validation errors during train.
     '''
     n_obs_per_day = df_train['day'].value_counts().sort_index().values
     n_obs_total = n_obs_per_day.sum()
@@ -148,23 +147,27 @@ class MetaEstimator():
         y_ls = [y[y['day'] == i] for i in days]
         
         best_estimator_ls = []
+        n_obs_per_day = []
         for i in range(len(self.best_params)):
             params = self.best_params[i]
             ridge = Ridge(normalize=False, random_state=42, **params)
             X = X_ls[i].drop('day', axis=1)
             y = y_ls[i].drop('day', axis=1)
             best_estimator_ls.append(ridge.fit(X, y))
-            
+            n_obs_per_day.append(len(X))
+        
         self.estimators_ls = best_estimator_ls
+        
+        n_obs_total = np.sum(n_obs_per_day)
         
         intercept = 0
         coef = np.zeros_like(self.estimators_ls[0].coef_)
-        for estimator in self.estimators_ls:
-            intercept += estimator.intercept_
-            coef += estimator.coef_
+        for i, estimator in enumerate(self.estimators_ls):
+            intercept += n_obs_per_day[i]*estimator.intercept_
+            coef += n_obs_per_day[i]*estimator.coef_
         n_estimators = len(self.estimators_ls)
         
-        self.coefs = np.append(intercept, coef[0]) / n_estimators
+        self.coefs = np.append(intercept, coef[0]) / n_obs_total
     
     def predict(self, X):
         days = X['day'].unique()
@@ -178,15 +181,14 @@ class MetaEstimator():
         return preds
 
 
-def train_model(summary_df, df_train, df_test, results_train_df):
+def final_model(summary_df, df_train, df_test, results_train_df):
     '''
     Train a Ridge Regression model for predicting patient's consultation end time after triage assessment,
     and return:
         - trained model
         - train model's features
-        - Root Mean Squared Log Error (RMSLE) for training, validation and testing
+        - Root Mean Squared Log Error (RMSLE) for train and test
     '''
-
     scaler = StandardScaler()
 
     df_train_new = df_train.drop(['day', 'consultation_end_time', 'duration'], axis=1)
@@ -199,6 +201,9 @@ def train_model(summary_df, df_train, df_test, results_train_df):
     pd.concat([pd.DataFrame(scaler.transform(df_test_new), columns=df_test_new.columns, index=df_test_new.index),
             df_test['day']], axis=1)
 
+    scaler_stats = {'mean': scaler.mean_, 'sd': np.sqrt(scaler.var_)}
+    joblib.dump(scaler_stats, 'scaler_stats.pkl')
+
     y_train = df_train[['day', 'consultation_end_time']]
     y_test = df_test[['day', 'consultation_end_time']]
 
@@ -207,28 +212,19 @@ def train_model(summary_df, df_train, df_test, results_train_df):
 
     features = df_train_new.columns
 
-    return meta, features
+    duration_train = df_train['consultation_end_time'] - df_train['assessment_end_time']
+    duration_train_pred = meta.predict(X_train_scaled) - df_train['assessment_end_time']
 
+    duration_test = df_test['consultation_end_time'] - df_test['assessment_end_time']
+    duration_test_pred = meta.predict(X_test_scaled) - df_test['assessment_end_time']
 
-def get_model_results(meta, df_train, df_test):
-    '''
-    Returns train and test errors after training is concluded.
-    '''
-    X_train = df_train.drop(['consultation_end_time', 'duration'], axis=1)
-    y_train_true = df_train['consultation_end_time'] - df_train['assessment_end_time']
-    y_train_pred = meta.predict(X_train) - df_train['assessment_end_time']
-
-    X_test = df_test.drop(['consultation_end_time', 'duration'], axis=1)
-    y_test_true = df_test['consultation_end_time'] - df_test['assessment_end_time']
-    y_test_pred = meta.predict(X_test) - df_test['assessment_end_time']
-
-    train_error = np.sqrt(mean_squared_log_error(y_train_true, y_train_pred))
-    test_error = np.sqrt(mean_squared_log_error(y_test_true, y_test_pred))
+    train_error = np.sqrt(mean_squared_log_error(duration_train, duration_train_pred))
+    test_error = np.sqrt(mean_squared_log_error(duration_test, duration_test_pred))
 
     print(f'train RMSLE: {train_error}')
     print(f'test RMSLE: {test_error}')
 
-    return train_error, test_error
+    return meta, features, train_error, test_error
 
 
 def get_overall_error(meta, summary_df, results_train_df):
@@ -244,7 +240,6 @@ def get_overall_error(meta, summary_df, results_train_df):
     meta = MetaEstimator(results_train_df['best_params'])
     meta.fit(X, y)
 
-    X = summary_df.drop(['consultation_end_time', 'duration'], axis=1)
     y_true = summary_df['consultation_end_time'] - summary_df['assessment_end_time']
     y_pred = meta.predict(X) - summary_df['assessment_end_time']
 
